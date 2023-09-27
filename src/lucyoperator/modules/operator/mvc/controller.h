@@ -15,4 +15,5 @@ class Controller {
 
  private:
   std::shared_ptr<LucyNet::Connector> connector;
+  std::shared_ptr<LucyNet::Connection> connection;
 };
