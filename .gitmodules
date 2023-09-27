@@ -1,0 +1,6 @@
+[submodule "libs/lucynet"]
+	path = libs/lucynet
+	url = https://github.com/KulahaRoman/lucynet.git
+[submodule "libs/lucycore"]
+	path = libs/lucycore
+	url = https://github.com/KulahaRoman/lucycore.git
