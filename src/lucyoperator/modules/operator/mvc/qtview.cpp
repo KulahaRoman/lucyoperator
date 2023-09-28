@@ -11,11 +11,17 @@ void QtView::Run() {
   MainWindow window;
 
   QObject::connect(&window, &MainWindow::connectButtonPressed,
-                   [this](const auto& address, auto port) {
-                     controller->OnConnectButtonPressed(address, port);
+                   [this, &window](const auto& address, auto port) {
+                     auto result = controller->ConnectToServer(address, port);
+                     window.toggleConnectButton(!result);
+                     window.toggleDisconnectButton(result);
                    });
   QObject::connect(&window, &MainWindow::disconnectButtonPressed,
-                   [this] { controller->OnDisconnectButtonPressed(); });
+                   [this, &window] {
+                     auto result = controller->DisconnectFromServer();
+                     window.toggleConnectButton(result);
+                     window.toggleDisconnectButton(!result);
+                   });
 
   window.show();
 

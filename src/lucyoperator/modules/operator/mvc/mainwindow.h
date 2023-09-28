@@ -20,6 +20,10 @@ class MainWindow : public QMainWindow {
   void connectButtonPressed(const std::string& address, unsigned short port);
   void disconnectButtonPressed();
 
+ public slots:
+  void toggleConnectButton(bool enabled);
+  void toggleDisconnectButton(bool enabled);
+
  private:
   QPointer<QWidget> centralWidget;
   QPointer<QVBoxLayout> centralLayout;

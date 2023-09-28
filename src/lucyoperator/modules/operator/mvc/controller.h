@@ -1,5 +1,7 @@
 #pragma once
 #include <cpputils/logger.h>
+#include <lucynet/authrequestpackage.h>
+#include <lucynet/authresponsepackage.h>
 #include <lucynet/connector.h>
 
 #include <chrono>
@@ -10,10 +12,12 @@ class Controller {
  public:
   Controller(const std::shared_ptr<LucyNet::Connector>& connector);
 
-  void OnConnectButtonPressed(const std::string& address, unsigned short port);
-  void OnDisconnectButtonPressed();
+  bool ConnectToServer(const std::string& address, unsigned short port);
+  bool DisconnectFromServer();
 
  private:
   std::shared_ptr<LucyNet::Connector> connector;
-  std::shared_ptr<LucyNet::Connection> connection;
+
+  std::shared_ptr<LucyNet::Machine> serverMachine;
+  std::shared_ptr<LucyNet::Connection> serverConnection;
 };

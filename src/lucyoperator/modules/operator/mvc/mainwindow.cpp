@@ -81,3 +81,11 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 }
 
 MainWindow::~MainWindow() {}
+
+void MainWindow::toggleConnectButton(bool enabled) {
+  connectButton->setEnabled(enabled);
+}
+
+void MainWindow::toggleDisconnectButton(bool enabled) {
+  disconnectButton->setEnabled(enabled);
+}
