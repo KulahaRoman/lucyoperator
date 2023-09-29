@@ -1,8 +1,6 @@
 #pragma once
 #include <cpputils/logger.h>
 #include <cpputils/threadpool.h>
-#include <lucynet/authrequestpackage.h>
-#include <lucynet/authresponsepackage.h>
 #include <lucynet/connector.h>
 
 #include <chrono>
