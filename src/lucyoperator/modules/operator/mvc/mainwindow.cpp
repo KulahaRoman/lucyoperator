@@ -88,3 +88,12 @@ void MainWindow::toggleConnectButton(bool enabled) {
 void MainWindow::toggleDisconnectButton(bool enabled) {
   disconnectButton->setEnabled(enabled);
 }
+
+void MainWindow::toggleLineEdit(bool enabled) {
+  addressInput->setEnabled(enabled);
+  portInput->setEnabled(enabled);
+}
+
+void MainWindow::toggleTable(bool enabled) {
+  targetsTable->setEnabled(enabled);
+}

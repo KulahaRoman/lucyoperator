@@ -26,6 +26,8 @@ class MainWindow : public QMainWindow {
  public slots:
   void toggleConnectButton(bool enabled);
   void toggleDisconnectButton(bool enabled);
+  void toggleLineEdit(bool enabled);
+  void toggleTable(bool enabled);
 
  private:
   QPointer<QWidget> centralWidget;

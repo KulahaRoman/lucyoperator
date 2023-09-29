@@ -30,6 +30,8 @@ void QtView::Run() {
 
           window.toggleConnectButton(true);
           window.toggleDisconnectButton(false);
+          window.toggleLineEdit(true);
+          window.toggleTable(false);
 
         } catch (const std::exception& exc) {
           CppUtils::Logger::Error("Failed to disconnect: {}", exc.what());
@@ -39,11 +41,13 @@ void QtView::Run() {
                    [&window] {
                      window.toggleConnectButton(false);
                      window.toggleDisconnectButton(true);
+                     window.toggleLineEdit(false);
                    });
   QObject::connect(&window, &MainWindow::unsuccessfullyConnected, &window,
                    [&window] {
                      window.toggleConnectButton(true);
                      window.toggleDisconnectButton(false);
+                     window.toggleLineEdit(true);
                    });
 
   window.show();
