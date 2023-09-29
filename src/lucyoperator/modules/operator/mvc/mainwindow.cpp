@@ -69,7 +69,6 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
     emit connectButtonPressed(address, port);
   });
-
   connect(disconnectButton, &QPushButton::released, [this] {
     connectButton->setEnabled(true);
     disconnectButton->setEnabled(false);

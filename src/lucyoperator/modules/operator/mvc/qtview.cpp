@@ -10,18 +10,27 @@ void QtView::Run() {
   QApplication app(argc, argv);
   MainWindow window;
 
-  QObject::connect(&window, &MainWindow::connectButtonPressed,
-                   [this, &window](const auto& address, auto port) {
-                     auto result = controller->ConnectToServer(address, port);
-                     window.toggleConnectButton(!result);
-                     window.toggleDisconnectButton(result);
-                   });
-  QObject::connect(&window, &MainWindow::disconnectButtonPressed,
-                   [this, &window] {
-                     auto result = controller->DisconnectFromServer();
-                     window.toggleConnectButton(result);
-                     window.toggleDisconnectButton(!result);
-                   });
+  QObject::connect(
+      &window, &MainWindow::connectButtonPressed,
+      [this, &window](const std::string& address, unsigned short port) {
+        window.toggleConnectButton(false);
+        window.toggleDisconnectButton(true);
+
+        controller->ConnectToServer(address, port, nullptr, [&window]() {
+          window.toggleConnectButton(true);
+          window.toggleDisconnectButton(false);
+        });
+      });
+  QObject::connect(
+      &window, &MainWindow::disconnectButtonPressed, [this, &window] {
+        try {
+          controller->DisconnectFromServer();
+          window.toggleConnectButton(true);
+          window.toggleDisconnectButton(false);
+        } catch (const std::exception& exc) {
+          CppUtils::Logger::Error("Failed to disconnect: {}", exc.what());
+        }
+      });
 
   window.show();
 

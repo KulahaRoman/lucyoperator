@@ -3,31 +3,40 @@
 Controller::Controller(const std::shared_ptr<LucyNet::Connector>& connector)
     : connector(connector) {}
 
-bool Controller::ConnectToServer(const std::string& address,
-                                 unsigned short port) {
-  try {
-    CppUtils::Logger::Information("Connecting to {}:{}", address, port);
-    auto connectionBundle = connector->Connect(address, port);
+void Controller::ConnectToServer(const std::string& address,
+                                 unsigned short port,
+                                 const std::function<void()>& onSuccess,
+                                 const std::function<void()>& onFailure) {
+  CppUtils::Logger::Information("Connecting to {}:{}", address, port);
+  connector->Connect(
+      address, port,
+      [this, onSuccess, address, port](const auto& connectionBundle) {
+        serverMachine = connectionBundle->GetMachine();
+        serverConnection = connectionBundle->GetConnection();
 
-    serverMachine = connectionBundle->GetMachine();
-    serverConnection = connectionBundle->GetConnection();
+        CppUtils::Logger::Information("Connected to {}:{}", address, port);
 
-    CppUtils::Logger::Information("Connected to {}:{}", address, port);
-  } catch (const std::exception& ex) {
-    CppUtils::Logger::Error("{}", ex.what());
-    return false;
-  }
-  return true;
+        if (onSuccess) {
+          onSuccess();
+        }
+      },
+      [this, onFailure, address, port](const auto& exc) {
+        serverMachine.reset();
+        serverConnection.reset();
+
+        CppUtils::Logger::Error("Failed to connected to {}:{}", address, port);
+
+        if (onFailure) {
+          onFailure();
+        }
+      });
 }
 
-bool Controller::DisconnectFromServer() {
-  try {
-    CppUtils::Logger::Information("Disconnecting...");
-    serverConnection.reset();
-    CppUtils::Logger::Information("Disconnected.");
-  } catch (const std::exception& ex) {
-    CppUtils::Logger::Error("{}", ex.what());
-    return false;
-  }
-  return true;
+void Controller::DisconnectFromServer() {
+  CppUtils::Logger::Information("Disconnecting...");
+
+  serverMachine.reset();
+  serverConnection.reset();
+
+  CppUtils::Logger::Information("Disconnected.");
 }

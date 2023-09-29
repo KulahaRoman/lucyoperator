@@ -1,19 +1,20 @@
 #pragma once
 #include <cpputils/logger.h>
+#include <cpputils/threadpool.h>
 #include <lucynet/authrequestpackage.h>
 #include <lucynet/authresponsepackage.h>
 #include <lucynet/connector.h>
 
 #include <chrono>
 
-constexpr auto RECONNECT_PERIOD = std::chrono::seconds(5);
-
 class Controller {
  public:
   Controller(const std::shared_ptr<LucyNet::Connector>& connector);
 
-  bool ConnectToServer(const std::string& address, unsigned short port);
-  bool DisconnectFromServer();
+  void ConnectToServer(const std::string& address, unsigned short port,
+                       const std::function<void()>& onSuccess,
+                       const std::function<void()>& onFailure);
+  void DisconnectFromServer();
 
  private:
   std::shared_ptr<LucyNet::Connector> connector;
