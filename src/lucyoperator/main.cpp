@@ -24,7 +24,6 @@ int main(int argc, char** argv) {
         [] { CppUtils::Logger::Information("Module \"Operator\" started."); },
         [] { CppUtils::Logger::Information("Module \"Operator\" finished."); });
 
-    CppUtils::Logger::Information("Awaiting modules termination...");
     moduleManager->AwaitTermination();
 
     CppUtils::Logger::Information("Finishing...");
