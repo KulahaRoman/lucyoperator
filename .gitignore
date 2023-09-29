@@ -10,6 +10,8 @@ bin
 lib
 include
 
+rsrc/*.aps
+
 # Prerequisites
 *.d
 
