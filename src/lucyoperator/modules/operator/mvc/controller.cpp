@@ -7,7 +7,6 @@ void Controller::ConnectToServer(const std::string& address,
                                  unsigned short port,
                                  const std::function<void()>& onSuccess,
                                  const std::function<void()>& onFailure) {
-  CppUtils::Logger::Information("Connecting to {}:{}", address, port);
   connector->Connect(
       address, port,
       [this, onSuccess, address, port](const auto& connectionBundle) {
@@ -33,8 +32,6 @@ void Controller::ConnectToServer(const std::string& address,
 }
 
 void Controller::DisconnectFromServer() {
-  CppUtils::Logger::Information("Disconnecting...");
-
   serverMachine.reset();
   serverConnection.reset();
 

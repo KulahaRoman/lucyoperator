@@ -20,6 +20,9 @@ class MainWindow : public QMainWindow {
   void connectButtonPressed(const std::string& address, unsigned short port);
   void disconnectButtonPressed();
 
+  void successfullyConnected();
+  void unsuccessfullyConnected();
+
  public slots:
   void toggleConnectButton(bool enabled);
   void toggleDisconnectButton(bool enabled);
