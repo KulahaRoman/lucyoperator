@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
   this->setMinimumWidth(500);
   this->setMaximumWidth(600);
 
-  this->setWindowTitle("Панель керування \"LOTUS\"");
+  this->setWindowTitle("Панель керування \"LUCY\"");
   this->setWindowIcon(QIcon(":images/logo"));
 
   this->menuBar()->addMenu("&Файл");
