@@ -2,12 +2,16 @@
 #include <cpputils/logger.h>
 #include <cpputils/threadpool.h>
 #include <lucynet/connector.h>
+#include <lucynet/machinehelper.h>
+#include <lucynet/packagedispatcher.h>
+#include <lucynet/targetsrequest.h>
 
 #include <chrono>
 
 class Controller {
  public:
-  Controller(const std::shared_ptr<LucyNet::Connector>& connector);
+  Controller(const std::shared_ptr<LucyNet::Connector>& connector,
+             const std::shared_ptr<LucyNet::PackageDispatcher>& dispatcher);
 
   void ConnectToServer(const std::string& address, unsigned short port,
                        const std::function<void()>& onSuccess,
@@ -19,6 +23,7 @@ class Controller {
 
  private:
   std::shared_ptr<LucyNet::Connector> connector;
+  std::shared_ptr<LucyNet::PackageDispatcher> packageDispatcher;
 
   std::shared_ptr<LucyNet::Machine> serverMachine;
   std::shared_ptr<LucyNet::Connection> serverConnection;

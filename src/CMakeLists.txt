@@ -12,6 +12,8 @@ set(LUCYOPERATOR_SRC
 			${PROJECT_NAME}/modules/operator/mvc/qtview.cpp
 			${PROJECT_NAME}/modules/operator/mvc/mainwindow.cpp
 			${PROJECT_NAME}/modules/operator/mvc/targetpanel.cpp
+			${PROJECT_NAME}/modules/operator/mvc/targetshandler.cpp
+			${PROJECT_NAME}/modules/operator/mvc/operatordispatcher.cpp
 )
 
 if(WIN32) 

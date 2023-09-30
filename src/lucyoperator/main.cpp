@@ -2,7 +2,9 @@
 #include <lucynet/unsecuretcpconnector.h>
 
 #include "modules/operator/mvc/controller.h"
+#include "modules/operator/mvc/operatordispatcher.h"
 #include "modules/operator/mvc/qtview.h"
+#include "modules/operator/mvc/targetshandler.h"
 #include "modules/operator/operator.h"
 
 int main(int argc, char** argv) {
@@ -11,7 +13,13 @@ int main(int argc, char** argv) {
 
     auto connector = std::make_shared<LucyNet::UnsecureTcpConnector>();
 
-    auto controller = std::make_shared<Controller>(connector);
+    auto dispatcher = std::make_shared<OperatorDispatcher>();
+    auto targetsHandler = std::make_shared<TargetsHandler>();
+
+    dispatcher->RegisterHandler(LucyNet::PackageType::TARGETS_RESPONSE,
+                                targetsHandler);
+
+    auto controller = std::make_shared<Controller>(connector, dispatcher);
     auto view = std::make_shared<QtView>(controller);
     auto oper = std::make_shared<Operator>(view);
 
