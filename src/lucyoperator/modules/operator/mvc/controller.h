@@ -15,6 +15,9 @@ class Controller {
   void DisconnectFromServer();
 
  private:
+  void receivePackages();
+
+ private:
   std::shared_ptr<LucyNet::Connector> connector;
 
   std::shared_ptr<LucyNet::Machine> serverMachine;

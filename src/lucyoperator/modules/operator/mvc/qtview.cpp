@@ -26,6 +26,8 @@ void QtView::Run() {
   QObject::connect(
       &window, &MainWindow::disconnectButtonPressed, &window, [this, &window] {
         try {
+          CppUtils::Logger::Information("Disconnected from the server.");
+
           controller->DisconnectFromServer();
 
           window.toggleConnectButton(true);

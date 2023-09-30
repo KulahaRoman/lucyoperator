@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow {
 
   void successfullyConnected();
   void unsuccessfullyConnected();
+  void lostConnection();
 
  public slots:
   void toggleConnectButton(bool enabled);

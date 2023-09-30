@@ -9,31 +9,38 @@ void Controller::ConnectToServer(const std::string& address,
                                  const std::function<void()>& onFailure) {
   connector->Connect(
       address, port,
-      [this, onSuccess, address, port](const auto& connectionBundle) {
+      [this, onSuccess](const auto& connectionBundle) {
         serverMachine = connectionBundle->GetMachine();
         serverConnection = connectionBundle->GetConnection();
 
-        CppUtils::Logger::Information("Connected to {}:{}", address, port);
+        CppUtils::Logger::Information(
+            "Connected to the server {} ({}:{}).", serverMachine->GetName(),
+            serverConnection->GetAddress(), serverConnection->GetPort());
 
         if (onSuccess) {
           onSuccess();
         }
+
+        receivePackages();
       },
       [this, onFailure, address, port](const auto& exc) {
-        serverMachine.reset();
-        serverConnection.reset();
-
-        CppUtils::Logger::Error("Failed to connected to {}:{}", address, port);
-
+        CppUtils::Logger::Error("Failed to connect the server ({}:{}).",
+                                address, port);
         if (onFailure) {
           onFailure();
         }
+
+        DisconnectFromServer();
       });
 }
 
 void Controller::DisconnectFromServer() {
   serverMachine.reset();
   serverConnection.reset();
+}
 
-  CppUtils::Logger::Information("Disconnected.");
+void Controller::receivePackages() {
+  serverConnection->ReceivePackage(
+      [this](const auto& package) { receivePackages(); },
+      [this](const auto& exc) {});
 }
