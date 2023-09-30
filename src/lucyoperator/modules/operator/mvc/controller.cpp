@@ -15,11 +15,11 @@ void Controller::ConnectToServer(const std::string& address,
         serverMachine = connectionBundle->GetMachine();
         serverConnection = connectionBundle->GetConnection();
 
+        receivePackages();
+
         CppUtils::Logger::Information(
             "Connected to the server {} ({}:{}).", serverMachine->GetName(),
             serverConnection->GetAddress(), serverConnection->GetPort());
-
-        receivePackages();
 
         auto targetsRequest = std::make_shared<LucyNet::TargetsRequest>();
         targetsRequest->SetReceiver(serverMachine);
@@ -60,5 +60,7 @@ void Controller::receivePackages() {
         packageDispatcher->DispatchPackage(package, serverConnection);
         receivePackages();
       },
-      [this](const auto& exc) {});
+      [this](const auto& exc) {
+        CppUtils::Logger::Information("Disconnected from server.");
+      });
 }
