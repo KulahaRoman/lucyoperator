@@ -8,12 +8,12 @@ set(LUCYOPERATOR_SRC
 
 			# Operator
 			${PROJECT_NAME}/modules/operator/operator.cpp
-			${PROJECT_NAME}/modules/operator/mvc/controller.cpp
-			${PROJECT_NAME}/modules/operator/mvc/qtview.cpp
-			${PROJECT_NAME}/modules/operator/mvc/mainwindow.cpp
-			${PROJECT_NAME}/modules/operator/mvc/targetpanel.cpp
-			${PROJECT_NAME}/modules/operator/mvc/targetshandler.cpp
-			${PROJECT_NAME}/modules/operator/mvc/operatordispatcher.cpp
+			${PROJECT_NAME}/modules/operator/controller.cpp
+			${PROJECT_NAME}/modules/operator/qtview.cpp
+			${PROJECT_NAME}/modules/operator/mainwindow.cpp
+			${PROJECT_NAME}/modules/operator/targetpanel.cpp
+			${PROJECT_NAME}/modules/operator/targetshandler.cpp
+			${PROJECT_NAME}/modules/operator/operatordispatcher.cpp
 )
 
 if(WIN32) 

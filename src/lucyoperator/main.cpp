@@ -1,10 +1,10 @@
 #include <lucycore/modulemanager.h>
 #include <lucynet/unsecuretcpconnector.h>
 
-#include "modules/operator/mvc/controller.h"
-#include "modules/operator/mvc/operatordispatcher.h"
-#include "modules/operator/mvc/qtview.h"
-#include "modules/operator/mvc/targetshandler.h"
+#include "modules/operator/controller.h"
+#include "modules/operator/operatordispatcher.h"
+#include "modules/operator/qtview.h"
+#include "modules/operator/targetshandler.h"
 #include "modules/operator/operator.h"
 
 int main(int argc, char** argv) {

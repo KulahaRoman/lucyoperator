@@ -3,7 +3,7 @@
 
 #include <atomic>
 
-#include "mvc/view.h"
+#include "view.h"
 
 class Operator : public LucyCore::Module::AbstractContiniousModule {
  public:
