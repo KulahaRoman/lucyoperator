@@ -1,9 +1,8 @@
 #include "operator.h"
 
-Operator::Operator(const std::shared_ptr<View>& view) : view(view) {}
+Operator::Operator(const std::shared_ptr<RunnableView>& runnableView)
+    : runnableView(runnableView) {}
 
-Operator::~Operator() {}
+void Operator::run() { runnableView->Run(); }
 
-void Operator::run() { view->Run(); }
-
-void Operator::stop() { view->Stop(); }
+void Operator::stop() { runnableView->Stop(); }

@@ -1,11 +1,11 @@
 #include <lucycore/modulemanager.h>
 #include <lucynet/unsecuretcpconnector.h>
 
-#include "modules/operator/controller.h"
-#include "modules/operator/operatordispatcher.h"
-#include "modules/operator/qtview.h"
-#include "modules/operator/targetshandler.h"
+#include "modules/operator/maincontroller.h"
+#include "modules/operator/mainview.h"
 #include "modules/operator/operator.h"
+#include "modules/operator/operatordispatcher.h"
+#include "modules/operator/targetshandler.h"
 
 int main(int argc, char** argv) {
   try {
@@ -19,8 +19,11 @@ int main(int argc, char** argv) {
     dispatcher->RegisterHandler(LucyNet::PackageType::TARGETS_RESPONSE,
                                 targetsHandler);
 
-    auto controller = std::make_shared<Controller>(connector, dispatcher);
-    auto view = std::make_shared<QtView>(controller);
+    auto controller = std::make_shared<MainController>(connector, dispatcher);
+    auto view = std::make_shared<MainView>(controller);
+
+    controller->SetView(view);
+
     auto oper = std::make_shared<Operator>(view);
 
     auto moduleManager = std::make_shared<LucyCore::Module::ModuleManager>();

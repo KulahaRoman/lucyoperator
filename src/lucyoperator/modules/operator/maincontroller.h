@@ -8,10 +8,15 @@
 
 #include <chrono>
 
-class Controller {
+#include "viewcontroller.h"
+
+class MainController : public Controller {
  public:
-  Controller(const std::shared_ptr<LucyNet::Connector>& connector,
-             const std::shared_ptr<LucyNet::PackageDispatcher>& dispatcher);
+  MainController(const std::shared_ptr<LucyNet::Connector>& connector,
+                 const std::shared_ptr<LucyNet::PackageDispatcher>& dispatcher);
+  MainController(const std::shared_ptr<View>& view,
+                 const std::shared_ptr<LucyNet::Connector>& connector,
+                 const std::shared_ptr<LucyNet::PackageDispatcher>& dispatcher);
 
   void ConnectToServer(const std::string& address, unsigned short port,
                        const std::function<void()>& onSuccess,

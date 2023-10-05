@@ -1,14 +1,20 @@
-#include "controller.h"
+#include "maincontroller.h"
 
-Controller::Controller(
+MainController::MainController(
     const std::shared_ptr<LucyNet::Connector>& connector,
     const std::shared_ptr<LucyNet::PackageDispatcher>& dispatcher)
     : connector(connector), packageDispatcher(dispatcher) {}
 
-void Controller::ConnectToServer(const std::string& address,
-                                 unsigned short port,
-                                 const std::function<void()>& onSuccess,
-                                 const std::function<void()>& onFailure) {
+MainController::MainController(
+    const std::shared_ptr<View>& view,
+    const std::shared_ptr<LucyNet::Connector>& connector,
+    const std::shared_ptr<LucyNet::PackageDispatcher>& dispatcher)
+    : Controller(view), connector(connector), packageDispatcher(dispatcher) {}
+
+void MainController::ConnectToServer(const std::string& address,
+                                     unsigned short port,
+                                     const std::function<void()>& onSuccess,
+                                     const std::function<void()>& onFailure) {
   connector->Connect(
       address, port,
       [this, onSuccess, onFailure](const auto& connectionBundle) {
@@ -49,12 +55,12 @@ void Controller::ConnectToServer(const std::string& address,
       });
 }
 
-void Controller::DisconnectFromServer() {
+void MainController::DisconnectFromServer() {
   serverMachine.reset();
   serverConnection.reset();
 }
 
-void Controller::receivePackages() {
+void MainController::receivePackages() {
   serverConnection->ReceivePackage(
       [this](const auto& package) {
         packageDispatcher->DispatchPackage(package, serverConnection);
