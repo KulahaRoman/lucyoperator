@@ -2,6 +2,7 @@
 #include <qboxlayout.h>
 #include <qformlayout.h>
 #include <qgroupbox.h>
+#include <qheaderview.h>
 #include <qlineedit.h>
 #include <qmainwindow.h>
 #include <qmenubar.h>
@@ -32,6 +33,7 @@ class MainWindow : public QMainWindow {
   void toggleLineEdit(bool enabled);
   void toggleTable(bool enabled);
   void updateTable(const TargetsList& targets);
+  void clearTable();
 
  private:
   QPointer<QWidget> centralWidget;

@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
   centralLayout = new QVBoxLayout();
 
-  serverGroup = new QGroupBox("Підключення до серверу", centralWidget);
+  serverGroup = new QGroupBox("Server", centralWidget);
 
   serverGroupLayout = new QHBoxLayout();
   serverCredsLayout = new QFormLayout();
@@ -18,12 +18,12 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
   portInput->setMaximumWidth(50);
   portInput->setText("500");
 
-  connectButton = new QPushButton("Підключитись", serverGroup);
-  disconnectButton = new QPushButton("Відключитись", serverGroup);
+  connectButton = new QPushButton("Connect", serverGroup);
+  disconnectButton = new QPushButton("Disconnect", serverGroup);
   disconnectButton->setEnabled(false);
 
-  serverCredsLayout->addRow("Адреса:", addressInput);
-  serverCredsLayout->addRow("Порт:", portInput);
+  serverCredsLayout->addRow("Address:", addressInput);
+  serverCredsLayout->addRow("Port:", portInput);
 
   serverCredsLayout->setLabelAlignment(Qt::AlignRight);
 
@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
   serverGroup->setLayout(serverGroupLayout);
 
-  targetGroup = new QGroupBox("Цільові ПК", centralWidget);
+  targetGroup = new QGroupBox("Targets", centralWidget);
   targetGroupLayout = new QGridLayout(targetGroup);
 
   targetsTableModel = new TargetsTableModel(this);
@@ -43,6 +43,14 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
   targetsTable = new QTableView(targetGroup);
   targetsTable->setEnabled(false);
   targetsTable->setModel(targetsTableModel);
+
+  targetsTable->setSelectionBehavior(QTableView::SelectRows);
+
+  targetsTable->horizontalHeader()->setSectionResizeMode(0,
+                                                         QHeaderView::Stretch);
+  targetsTable->horizontalHeader()->setSectionResizeMode(1,
+                                                         QHeaderView::Stretch);
+  targetsTable->verticalHeader()->hide();
 
   targetGroupLayout->addWidget(targetsTable);
 
@@ -56,11 +64,11 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
   this->setMinimumWidth(500);
   this->setMaximumWidth(600);
 
-  this->setWindowTitle("Панель керування \"LUCY\"");
+  this->setWindowTitle("Control panel <LUCY>");
   this->setWindowIcon(QIcon(":images/logo"));
 
-  this->menuBar()->addMenu("&Файл");
-  this->menuBar()->addMenu("&Про застосунок");
+  this->menuBar()->addMenu("&File");
+  this->menuBar()->addMenu("&About");
 
   connect(connectButton, &QPushButton::released, [this] {
     connectButton->setEnabled(false);
@@ -105,3 +113,5 @@ void MainWindow::toggleTable(bool enabled) {
 void MainWindow::updateTable(const TargetsList& targets) {
   targetsTableModel->SetTargets(targets);
 }
+
+void MainWindow::clearTable() { targetsTableModel->Clear(); }

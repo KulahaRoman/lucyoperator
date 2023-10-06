@@ -62,6 +62,8 @@ void MainView::initializeGUI() {
     mainWindow->toggleConnectButton(true);
     mainWindow->toggleDisconnectButton(false);
     mainWindow->toggleLineEdit(true);
+
+    mainWindow->clearTable();
   });
   QObject::connect(
       mainWindow, &MainWindow::targetsReceived, mainWindow,

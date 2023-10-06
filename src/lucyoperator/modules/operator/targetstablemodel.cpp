@@ -19,6 +19,11 @@ void TargetsTableModel::SetTargets(const TargetsList& list) {
   emit layoutChanged();
 }
 
+void TargetsTableModel::Clear() {
+  targets.clear();
+  emit layoutChanged();
+}
+
 int TargetsTableModel::rowCount(const QModelIndex& parent) const {
   return targets.size();
 }
@@ -42,6 +47,25 @@ QVariant TargetsTableModel::data(const QModelIndex& index, int role) const {
           // address
         case 1:
           return QString::fromStdString(target.second);
+      }
+    }
+  }
+
+  return QVariant();
+}
+
+QVariant TargetsTableModel::headerData(int section, Qt::Orientation orientation,
+                                       int role) const {
+  switch (role) {
+    case Qt::DisplayRole: {
+      if (orientation == Qt::Horizontal) {
+        switch (section) {
+          case 0:
+            return QString::fromStdString("Name");
+          case 1:
+            return QString::fromStdString("IP Address");
+        }
+        break;
       }
     }
   }
