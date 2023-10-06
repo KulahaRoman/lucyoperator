@@ -17,6 +17,8 @@ void MainView::Run() {
     throw std::runtime_error("GUI application crashed.");
   }
 
+  getController()->Notify("disconnect");
+
   terminateGUI();
 }
 
@@ -32,42 +34,38 @@ void MainView::initializeGUI() {
   QObject::connect(mainWindow, &MainWindow::connectButtonPressed, mainWindow,
                    [this](const std::string& address, unsigned short port) {
                      mainWindow->toggleConnectButton(false);
-                     mainWindow->toggleDisconnectButton(true);
+                     mainWindow->toggleDisconnectButton(false);
+                     mainWindow->toggleLineEdit(false);
 
-                     /*controller->ConnectToServer(
-                         address, port,
-                         [&window, address, port]() { emit
-                        window.successfullyConnected(); },
-                         [&window, address, port]() {
-                           emit window.unsuccessfullyConnected();
-                         });*/
+                     ServerCredentials serverCredentials;
+                     serverCredentials.SetAddress(address);
+                     serverCredentials.SetPort(port);
+
+                     getController()->Notify("connect", serverCredentials);
                    });
   QObject::connect(
       mainWindow, &MainWindow::disconnectButtonPressed, mainWindow, [this] {
         try {
-          /*controller->DisconnectFromServer();*/
-
           mainWindow->toggleConnectButton(true);
           mainWindow->toggleDisconnectButton(false);
           mainWindow->toggleLineEdit(true);
           mainWindow->toggleTable(false);
 
+          getController()->Notify("disconnect");
         } catch (const std::exception& exc) {
           CppUtils::Logger::Error("Failed to disconnect: {}", exc.what());
         }
       });
-  QObject::connect(mainWindow, &MainWindow::successfullyConnected, mainWindow,
-                   [this] {
-                     mainWindow->toggleConnectButton(false);
-                     mainWindow->toggleDisconnectButton(true);
-                     mainWindow->toggleLineEdit(false);
-                   });
-  QObject::connect(mainWindow, &MainWindow::unsuccessfullyConnected, mainWindow,
-                   [this] {
-                     mainWindow->toggleConnectButton(true);
-                     mainWindow->toggleDisconnectButton(false);
-                     mainWindow->toggleLineEdit(true);
-                   });
+  QObject::connect(mainWindow, &MainWindow::connected, mainWindow,
+                   [this] { mainWindow->toggleDisconnectButton(true); });
+  QObject::connect(mainWindow, &MainWindow::disconnected, mainWindow, [this] {
+    mainWindow->toggleConnectButton(true);
+    mainWindow->toggleDisconnectButton(false);
+    mainWindow->toggleLineEdit(true);
+  });
+  QObject::connect(
+      mainWindow, &MainWindow::targetsReceived, mainWindow,
+      [this](const TargetsList& targets) { mainWindow->updateTable(targets); });
 }
 
 void MainView::terminateGUI() {
@@ -78,4 +76,11 @@ void MainView::terminateGUI() {
   guiEngine = nullptr;
 }
 
-void MainView::initializeRoutes() {}
+void MainView::initializeRoutes() {
+  RegisterRoute("connected", [this] { emit mainWindow->connected(); });
+  RegisterRoute("disconnected", [this] { emit mainWindow->disconnected(); });
+  RegisterRoute<TargetsList>("targetsReceived",
+                             [this](const TargetsList& targets) {
+                               emit mainWindow->targetsReceived(targets);
+                             });
+}

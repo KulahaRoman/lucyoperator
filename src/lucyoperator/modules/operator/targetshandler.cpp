@@ -14,6 +14,12 @@ void TargetsHandler::Handle(
     const std::shared_ptr<LucyNet::Connection>& connection) {
   auto targetsResponse =
       std::static_pointer_cast<LucyNet::TargetsResponse>(package);
-  auto targetsList = TargetsList(targetsResponse->GetTargets());
+  TargetsList targetsList(targetsResponse->GetTargets());
+
+  if (!view) {
+    throw std::runtime_error(
+        "TargetsHandler::Handle() failed: 'view' object doesn't exist.");
+  }
+
   view->Update("targetsReceived", targetsList);
 }

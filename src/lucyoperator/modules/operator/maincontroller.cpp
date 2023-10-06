@@ -3,18 +3,50 @@
 MainController::MainController(
     const std::shared_ptr<LucyNet::Connector>& connector,
     const std::shared_ptr<LucyNet::PackageDispatcher>& dispatcher)
-    : connector(connector), packageDispatcher(dispatcher) {}
+    : connector(connector), packageDispatcher(dispatcher) {
+  initializeRoutes();
+}
 
 MainController::MainController(
     const std::shared_ptr<View>& view,
     const std::shared_ptr<LucyNet::Connector>& connector,
     const std::shared_ptr<LucyNet::PackageDispatcher>& dispatcher)
-    : Controller(view), connector(connector), packageDispatcher(dispatcher) {}
+    : Controller(view), connector(connector), packageDispatcher(dispatcher) {
+  initializeRoutes();
+}
 
-void MainController::ConnectToServer(const std::string& address,
-                                     unsigned short port,
-                                     const std::function<void()>& onSuccess,
-                                     const std::function<void()>& onFailure) {
+void MainController::receivePackages() {
+  serverConnection->ReceivePackage(
+      [this](const auto& package) {
+        packageDispatcher->DispatchPackage(package, serverConnection);
+        receivePackages();
+      },
+      [this](const auto& exc) {
+        CppUtils::Logger::Information("Disconnected from server.");
+        getView()->Update("disconnected");
+        disconnect();
+      });
+}
+
+void MainController::initializeRoutes() {
+  RegisterRoute<ServerCredentials>(
+      "connect", [this](const ServerCredentials& creds) {
+        auto address = creds.GetAddress();
+        auto port = creds.GetPort();
+
+        connect(
+            address, port, [this] { getView()->Update("connected"); },
+            [this] { getView()->Update("disconnected"); });
+      });
+  RegisterRoute("disconnect", [this] {
+    disconnect();
+    getView()->Update("disconnected");
+  });
+}
+
+void MainController::connect(const std::string& address, unsigned short port,
+                             const std::function<void()>& onSuccess,
+                             const std::function<void()>& onFailure) {
   connector->Connect(
       address, port,
       [this, onSuccess, onFailure](const auto& connectionBundle) {
@@ -50,23 +82,10 @@ void MainController::ConnectToServer(const std::string& address,
         if (onFailure) {
           onFailure();
         }
-
-        DisconnectFromServer();
       });
 }
 
-void MainController::DisconnectFromServer() {
+void MainController::disconnect() {
   serverMachine.reset();
   serverConnection.reset();
-}
-
-void MainController::receivePackages() {
-  serverConnection->ReceivePackage(
-      [this](const auto& package) {
-        packageDispatcher->DispatchPackage(package, serverConnection);
-        receivePackages();
-      },
-      [this](const auto& exc) {
-        CppUtils::Logger::Information("Disconnected from server.");
-      });
 }

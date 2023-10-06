@@ -8,6 +8,7 @@
 
 #include <chrono>
 
+#include "models/servercredentials.h"
 #include "viewcontroller.h"
 
 class MainController : public Controller {
@@ -18,13 +19,15 @@ class MainController : public Controller {
                  const std::shared_ptr<LucyNet::Connector>& connector,
                  const std::shared_ptr<LucyNet::PackageDispatcher>& dispatcher);
 
-  void ConnectToServer(const std::string& address, unsigned short port,
-                       const std::function<void()>& onSuccess,
-                       const std::function<void()>& onFailure);
-  void DisconnectFromServer();
-
  private:
   void receivePackages();
+
+  void initializeRoutes();
+
+  void connect(const std::string& address, unsigned short port,
+               const std::function<void()>& onSuccess,
+               const std::function<void()>& onFailure);
+  void disconnect();
 
  private:
   std::shared_ptr<LucyNet::Connector> connector;

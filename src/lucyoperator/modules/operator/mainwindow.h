@@ -10,6 +10,8 @@
 #include <qpushbutton.h>
 #include <qtableview.h>
 
+#include "targetstablemodel.h"
+
 class MainWindow : public QMainWindow {
   Q_OBJECT
  public:
@@ -20,15 +22,16 @@ class MainWindow : public QMainWindow {
   void connectButtonPressed(const std::string& address, unsigned short port);
   void disconnectButtonPressed();
 
-  void successfullyConnected();
-  void unsuccessfullyConnected();
-  void lostConnection();
+  void connected();
+  void disconnected();
+  void targetsReceived(const TargetsList& targets);
 
  public slots:
   void toggleConnectButton(bool enabled);
   void toggleDisconnectButton(bool enabled);
   void toggleLineEdit(bool enabled);
   void toggleTable(bool enabled);
+  void updateTable(const TargetsList& targets);
 
  private:
   QPointer<QWidget> centralWidget;
@@ -44,4 +47,5 @@ class MainWindow : public QMainWindow {
   QPointer<QGroupBox> targetGroup;
   QPointer<QGridLayout> targetGroupLayout;
   QPointer<QTableView> targetsTable;
+  QPointer<TargetsTableModel> targetsTableModel;
 };

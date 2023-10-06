@@ -1,0 +1,5 @@
+connect				-> ServerCredentials
+disconnect			-> void
+connected			-> void
+disconnected		-> void
+targetsReceived		-> TargetsList

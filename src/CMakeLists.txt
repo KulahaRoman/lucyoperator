@@ -15,6 +15,7 @@ set(LUCYOPERATOR_SRC
 			${PROJECT_NAME}/modules/operator/guiengine.cpp
 			${PROJECT_NAME}/modules/operator/targetpanel.cpp
 			${PROJECT_NAME}/modules/operator/targetshandler.cpp
+			${PROJECT_NAME}/modules/operator/targetstablemodel.cpp
 			${PROJECT_NAME}/modules/operator/operatordispatcher.cpp
 			${PROJECT_NAME}/modules/operator/models/servercredentials.cpp
 			${PROJECT_NAME}/modules/operator/models/targetslist.cpp

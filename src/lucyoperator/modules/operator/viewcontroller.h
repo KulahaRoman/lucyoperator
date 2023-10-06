@@ -23,7 +23,16 @@ class Controller : public Router {
 
 inline Controller::Controller(const std::shared_ptr<View>& view) : view(view) {}
 
-inline std::shared_ptr<View> Controller::getView() const { return view.lock(); }
+inline std::shared_ptr<View> Controller::getView() const {
+  auto viewPointer = view.lock();
+
+  if (!viewPointer) {
+    throw std::runtime_error(
+        "Controller::getView() failed: object doesn't exist.");
+  }
+
+  return viewPointer;
+}
 
 inline void Controller::SetView(const std::shared_ptr<View>& view) {
   this->view = view;
@@ -58,7 +67,14 @@ inline View::View(const std::shared_ptr<Controller>& controller)
     : controller(controller) {}
 
 inline std::shared_ptr<Controller> View::getController() const {
-  return controller.lock();
+  auto controllerPointer = controller.lock();
+
+  if (!controllerPointer) {
+    throw std::runtime_error(
+        "View::getController() failed: object doesn't exist.");
+  }
+
+  return controllerPointer;
 }
 
 inline void View::SetController(const std::shared_ptr<Controller>& controller) {

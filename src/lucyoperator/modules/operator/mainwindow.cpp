@@ -37,8 +37,12 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
   targetGroup = new QGroupBox("Цільові ПК", centralWidget);
   targetGroupLayout = new QGridLayout(targetGroup);
+
+  targetsTableModel = new TargetsTableModel(this);
+
   targetsTable = new QTableView(targetGroup);
   targetsTable->setEnabled(false);
+  targetsTable->setModel(targetsTableModel);
 
   targetGroupLayout->addWidget(targetsTable);
 
@@ -96,4 +100,8 @@ void MainWindow::toggleLineEdit(bool enabled) {
 
 void MainWindow::toggleTable(bool enabled) {
   targetsTable->setEnabled(enabled);
+}
+
+void MainWindow::updateTable(const TargetsList& targets) {
+  targetsTableModel->SetTargets(targets);
 }

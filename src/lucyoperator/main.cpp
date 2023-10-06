@@ -14,15 +14,15 @@ int main(int argc, char** argv) {
     auto connector = std::make_shared<LucyNet::UnsecureTcpConnector>();
 
     auto dispatcher = std::make_shared<OperatorDispatcher>();
-    auto targetsHandler = std::make_shared<TargetsHandler>();
-
-    dispatcher->RegisterHandler(LucyNet::PackageType::TARGETS_RESPONSE,
-                                targetsHandler);
 
     auto controller = std::make_shared<MainController>(connector, dispatcher);
     auto view = std::make_shared<MainView>(controller);
 
     controller->SetView(view);
+
+    auto targetsHandler = std::make_shared<TargetsHandler>(view);
+    dispatcher->RegisterHandler(LucyNet::PackageType::TARGETS_RESPONSE,
+                                targetsHandler);
 
     auto oper = std::make_shared<Operator>(view);
 
@@ -34,6 +34,12 @@ int main(int argc, char** argv) {
         oper,
         [] { CppUtils::Logger::Information("Module \"Operator\" started."); },
         [] { CppUtils::Logger::Information("Module \"Operator\" finished."); });
+
+    /*std::thread th([&moduleManager] {
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        moduleManager->InitiateTermination();
+        });
+    th.join();*/
 
     moduleManager->AwaitTermination();
 

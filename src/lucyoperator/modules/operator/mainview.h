@@ -7,6 +7,8 @@
 
 #include "guiengine.h"
 #include "mainwindow.h"
+#include "models/servercredentials.h"
+#include "models/targetslist.h"
 #include "runnableview.h"
 
 class MainView : public RunnableView {
